@@ -9,6 +9,7 @@ import (
 
 	"github.com/cbodonnell/oauth2utils/pkg/oauth"
 	"github.com/cbodonnell/oauth2utils/pkg/persistence"
+	"github.com/cbodonnell/oauth2utils/pkg/utils"
 )
 
 const (
@@ -19,31 +20,13 @@ const (
 
 func main() {
 	ctx := context.Background()
-
-	token, err := persistence.LoadToken()
-	if err != nil {
-		// failed to load token, so we need to get a new one
-		token, err = oauth.DeviceCode(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-
+	token := utils.TryGetToken(ctx)
 	if !token.Valid() {
-		// // first, try to refresh the token
-		// token, err = oauth.RefreshToken(ctx, token)
-		// if err != nil {
-		// 	// if that fails, then we need to get a new one
-		// 	token, err = oauth.DeviceCode(ctx)
-		// 	if err != nil {
-		// 		log.Fatal(err)
-		// 	}
-		// }
-
-		token, err = oauth.DeviceCode(ctx)
+		newToken, err := oauth.DeviceCode(ctx)
 		if err != nil {
 			log.Fatal(err)
 		}
+		token = newToken
 	}
 
 	if err := persistence.SaveToken(token); err != nil {

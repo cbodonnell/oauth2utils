@@ -36,6 +36,10 @@ func Client(ctx context.Context, token *oauth2.Token) *http.Client {
 	return conf.Client(ctx, token)
 }
 
+func RefreshToken(ctx context.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	return conf.TokenSource(ctx, token).Token()
+}
+
 func UserInfoURL() string {
 	return fmt.Sprintf("%s/realms/%s/protocol/openid-connect/userinfo", KeycloakServerUrl, RealmName)
 }

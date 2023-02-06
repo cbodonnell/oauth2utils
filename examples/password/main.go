@@ -9,17 +9,18 @@ import (
 
 	"github.com/cbodonnell/oauth2utils/pkg/oauth"
 	"github.com/cbodonnell/oauth2utils/pkg/persistence"
+	"github.com/cbodonnell/oauth2utils/pkg/utils"
 )
 
 func main() {
 	ctx := context.Background()
-
-	token, err := persistence.LoadToken()
-	if err != nil || !token.Valid() {
-		token, err = oauth.Password(ctx)
+	token := utils.TryGetToken(ctx)
+	if !token.Valid() {
+		newToken, err := oauth.Password(ctx)
 		if err != nil {
 			log.Fatal(err)
 		}
+		token = newToken
 	}
 
 	if err := persistence.SaveToken(token); err != nil {
