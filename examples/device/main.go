@@ -29,6 +29,7 @@ func main() {
 		token = newToken
 	}
 
+	// TODO: dont need to save the token if it hasn't changed
 	if err := persistence.SaveToken(token); err != nil {
 		log.Fatal(err)
 	}
