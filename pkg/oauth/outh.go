@@ -12,8 +12,8 @@ import (
 const (
 	// TODO: make this less keycloak specific
 	KeycloakServerUrl = "http://localhost:8080"
-	RealmName         = "tunnel-farm"
-	ClientId          = "myclient"
+	RealmName         = "tunnel.farm"
+	ClientId          = "tfarm-cli"
 )
 
 var conf *oauth2.Config
@@ -27,7 +27,7 @@ func init() {
 			AuthURL:  fmt.Sprintf("%s/realms/%s/protocol/openid-connect/auth", KeycloakServerUrl, RealmName),
 			TokenURL: fmt.Sprintf("%s/realms/%s/protocol/openid-connect/token", KeycloakServerUrl, RealmName),
 		},
-		Scopes: []string{"openid", "profile", "email"},
+		Scopes: []string{"openid", "tfarm", "profile"},
 	}
 	deviceCodeURI = fmt.Sprintf("%s/realms/%s/protocol/openid-connect/auth/device", KeycloakServerUrl, RealmName)
 }
@@ -38,4 +38,8 @@ func Client(ctx context.Context, token *oauth2.Token) *http.Client {
 
 func UserInfoURL() string {
 	return fmt.Sprintf("%s/realms/%s/protocol/openid-connect/userinfo", KeycloakServerUrl, RealmName)
+}
+
+func JWKSUrl() string {
+	return fmt.Sprintf("%s/realms/%s/protocol/openid-connect/certs", KeycloakServerUrl, RealmName)
 }
