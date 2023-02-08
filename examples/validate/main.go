@@ -16,9 +16,9 @@ import (
 func main() {
 	ctx := context.Background()
 
-	keys, err := oauth.GetJWKS(ctx)
+	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli")
 	if err != nil {
-		log.Fatalf("failed to get jwks: %v", err)
+		log.Fatal(err)
 	}
 
 	// create an http server
@@ -49,22 +49,31 @@ func main() {
 		// get the token from the header
 		token := parts[1]
 
-		claims, err := oauth.Validate(keys, token)
+		idToken, err := oc.Verify(r.Context(), token)
 		if err != nil {
-			log.Printf("failed to validate token: %v", err)
+			log.Printf("failed to verify token: %v", err)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 
-		// marshal claims to json
-		claimsJson, err := json.Marshal(claims)
+		// get the claims from the token
+		claims := map[string]interface{}{}
+		if err := idToken.Claims(&claims); err != nil {
+			log.Printf("failed to get claims: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		// marshal the claims into json
+		claimsJSON, err := json.Marshal(claims)
 		if err != nil {
 			log.Printf("failed to marshal claims: %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 
-		fmt.Fprint(w, string(claimsJson))
+		// write the claims to the response
+		fmt.Fprint(w, string(claimsJSON))
 	})
 
 	// start the server

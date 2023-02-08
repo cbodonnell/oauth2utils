@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
 
 	"github.com/cbodonnell/oauth2utils/pkg/oauth"
 	"github.com/cbodonnell/oauth2utils/pkg/persistence"
@@ -20,9 +19,15 @@ const (
 
 func main() {
 	ctx := context.Background()
-	token := utils.TryGetToken(ctx)
+
+	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	token := utils.TryGetToken(ctx, oc)
 	if !token.Valid() {
-		newToken, err := oauth.DeviceCode(ctx)
+		newToken, err := oc.DeviceCode(ctx)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -34,21 +39,21 @@ func main() {
 		log.Fatal(err)
 	}
 
-	client := oauth.Client(ctx, token)
-	res, err := client.Get(oauth.UserInfoURL())
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		log.Fatal("failed to get userinfo")
-	}
-
-	body, err := io.ReadAll(res.Body)
+	userInfo, err := oc.UserInfo(ctx, oc.TokenSource(ctx, token))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Print(string(body))
+	claims := map[string]interface{}{}
+	if err := userInfo.Claims(&claims); err != nil {
+		log.Fatal(err)
+	}
+
+	claimsJson, err := json.Marshal(claims)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Print(string(claimsJson))
+
 }

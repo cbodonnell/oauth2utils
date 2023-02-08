@@ -49,8 +49,8 @@ func (e ErrTryLater) Error() string {
 	return e.Err.Error()
 }
 
-func DeviceCode(ctx context.Context) (*oauth2.Token, error) {
-	deviceCode, err := getDeviceCode(ctx, conf, deviceCodeURI)
+func (oc *OIDCClient) DeviceCode(ctx context.Context) (*oauth2.Token, error) {
+	deviceCode, err := getDeviceCode(ctx, oc.conf, oc.provider.DeviceEndpoint())
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the device code: %v", err)
 	}
@@ -63,7 +63,7 @@ func DeviceCode(ctx context.Context) (*oauth2.Token, error) {
 
 	var token *oauth2.Token
 	for i := 0; i < deviceCode.ExpiresIn; i += deviceCode.Interval {
-		token, err = getAccessToken(ctx, conf, deviceCode)
+		token, err = getAccessToken(ctx, oc.conf, deviceCode)
 		if err == nil {
 			break
 		}
@@ -76,8 +76,6 @@ func DeviceCode(ctx context.Context) (*oauth2.Token, error) {
 
 		return nil, fmt.Errorf("failed to get the access token: %v", err)
 	}
-
-	fmt.Println("Success! You are now logged in.")
 
 	return token, nil
 }
