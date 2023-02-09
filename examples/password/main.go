@@ -8,6 +8,7 @@ import (
 
 	"github.com/cbodonnell/oauth2utils/pkg/oauth"
 	"github.com/cbodonnell/oauth2utils/pkg/persistence"
+	"github.com/cbodonnell/oauth2utils/pkg/term"
 	"github.com/cbodonnell/oauth2utils/pkg/utils"
 )
 
@@ -21,7 +22,9 @@ func main() {
 
 	token := utils.TryGetToken(ctx, oc)
 	if !token.Valid() {
-		newToken, err := oc.Password(ctx)
+		username := term.StringPrompt("Username:")
+		password := term.PasswordPrompt("Password:")
+		newToken, err := oc.Password(ctx, username, password)
 		if err != nil {
 			log.Fatal(err)
 		}

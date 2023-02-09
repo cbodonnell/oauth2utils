@@ -21,10 +21,9 @@ func NewOIDCClient(ctx context.Context, issuer string, clientID string) (*OIDCCl
 	}
 
 	conf := &oauth2.Config{
-		ClientID:     clientID,
-		ClientSecret: "", // TODO: Can we remove?
-		Endpoint:     provider.Endpoint(),
-		Scopes:       []string{oidc.ScopeOpenID, "tfarm", "profile"},
+		ClientID: clientID,
+		Endpoint: provider.Endpoint(),
+		Scopes:   []string{oidc.ScopeOpenID, "tfarm", "profile"},
 	}
 
 	return &OIDCClient{
