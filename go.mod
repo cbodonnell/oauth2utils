@@ -19,4 +19,4 @@ require (
 	google.golang.org/protobuf v1.28.0 // indirect
 )
 
-replace github.com/coreos/go-oidc/v3 => /Users/craig/go/src/github.com/cbodonnell/go-oidc
+replace github.com/coreos/go-oidc/v3 => github.com/cbodonnell/go-oidc/v3 v3.0.0-20230209024550-31e4e2bd7e6e
