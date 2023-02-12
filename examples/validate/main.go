@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/cbodonnell/oauth2utils/pkg/oauth"
+	"github.com/cbodonnell/oauth2utils/pkg/utils"
 )
 
 func main() {
@@ -23,31 +23,12 @@ func main() {
 
 	// create an http server
 	http.HandleFunc("/claims", func(w http.ResponseWriter, r *http.Request) {
-		// get the Authorization header
-		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
-			log.Println("no auth header")
+		token, err := utils.ParseBearerToken(r)
+		if err != nil {
+			log.Printf("failed to parse token: %v", err)
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-
-		// split the header into its parts
-		parts := strings.Split(authHeader, " ")
-		if len(parts) != 2 {
-			log.Println("invalid auth header, wrong number of parts")
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-
-		// make sure the header is a bearer token
-		if parts[0] != "Bearer" {
-			log.Println("invalid auth header, not a bearer token")
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-
-		// get the token from the header
-		token := parts[1]
 
 		idToken, err := oc.Verify(r.Context(), token)
 		if err != nil {
