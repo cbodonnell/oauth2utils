@@ -1,7 +1,5 @@
 package main
 
-// create a simple http server that parses the Authorization header
-
 import (
 	"context"
 	"encoding/json"
@@ -58,6 +56,6 @@ func main() {
 	})
 
 	// start the server
-	log.Println("starting server on :9090")
-	log.Fatal(http.ListenAndServe(":9090", nil))
+	log.Println("starting server on :9091")
+	log.Fatal(http.ListenAndServe(":9091", nil))
 }
