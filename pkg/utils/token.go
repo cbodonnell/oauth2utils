@@ -18,6 +18,9 @@ func TryGetToken(ctx context.Context, oc *oauth.OIDCClient) *oauth2.Token {
 	token, err := persistence.LoadToken()
 	if err == nil {
 		token, _ = oc.TokenSource(ctx, token).Token()
+		if token != nil {
+			persistence.SaveToken(token)
+		}
 	}
 	return token
 }
