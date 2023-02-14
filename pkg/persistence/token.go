@@ -70,3 +70,20 @@ func LoadToken() (*oauth2.Token, error) {
 
 	return &token, nil
 }
+
+func DeleteToken() error {
+	// get the user home directory
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	// open the token file
+	tokenFile := fmt.Sprintf("%s/%s/%s", home, TokenDir, TokenFile)
+	err = os.Remove(tokenFile)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
