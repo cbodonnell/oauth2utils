@@ -8,14 +8,11 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// TODO: Get these from env vars and defaults
 const (
-	// TokenFile is the name of the file where the token is stored
-	TokenDir  = ".tfarm"
 	TokenFile = "token.json"
 )
 
-func SaveToken(token *oauth2.Token) error {
+func SaveToken(token *oauth2.Token, tokenDir string) error {
 	// get the user home directory
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -23,14 +20,14 @@ func SaveToken(token *oauth2.Token) error {
 	}
 
 	// create the .tfarm directory
-	tfarmDir := fmt.Sprintf("%s/%s", home, TokenDir)
-	err = os.MkdirAll(tfarmDir, 0755)
+	dir := fmt.Sprintf("%s/%s", home, tokenDir)
+	err = os.MkdirAll(dir, 0755)
 	if err != nil {
 		return err
 	}
 
 	// create the token file
-	tokenFile := fmt.Sprintf("%s/%s", tfarmDir, TokenFile)
+	tokenFile := fmt.Sprintf("%s/%s", dir, TokenFile)
 	f, err := os.Create(tokenFile)
 	if err != nil {
 		return err
@@ -46,7 +43,7 @@ func SaveToken(token *oauth2.Token) error {
 	return nil
 }
 
-func LoadToken() (*oauth2.Token, error) {
+func LoadToken(tokenDir string) (*oauth2.Token, error) {
 	// get the user home directory
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -54,7 +51,7 @@ func LoadToken() (*oauth2.Token, error) {
 	}
 
 	// open the token file
-	tokenFile := fmt.Sprintf("%s/%s/%s", home, TokenDir, TokenFile)
+	tokenFile := fmt.Sprintf("%s/%s/%s", home, tokenDir, TokenFile)
 	f, err := os.Open(tokenFile)
 	if err != nil {
 		return nil, err
@@ -71,7 +68,7 @@ func LoadToken() (*oauth2.Token, error) {
 	return &token, nil
 }
 
-func DeleteToken() error {
+func DeleteToken(tokenDir string) error {
 	// get the user home directory
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -79,7 +76,7 @@ func DeleteToken() error {
 	}
 
 	// open the token file
-	tokenFile := fmt.Sprintf("%s/%s/%s", home, TokenDir, TokenFile)
+	tokenFile := fmt.Sprintf("%s/%s/%s", home, tokenDir, TokenFile)
 	err = os.Remove(tokenFile)
 	if err != nil {
 		return err

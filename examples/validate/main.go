@@ -14,7 +14,7 @@ import (
 func main() {
 	ctx := context.Background()
 
-	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli")
+	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli", []string{"profile"})
 	if err != nil {
 		log.Fatal(err)
 	}

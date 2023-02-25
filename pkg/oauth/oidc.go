@@ -14,7 +14,7 @@ type OIDCClient struct {
 	verifier *oidc.IDTokenVerifier
 }
 
-func NewOIDCClient(ctx context.Context, issuer string, clientID string) (*OIDCClient, error) {
+func NewOIDCClient(ctx context.Context, issuer string, clientID string, additionalScopes []string) (*OIDCClient, error) {
 	provider, err := oidc.NewProvider(ctx, issuer)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,11 @@ func NewOIDCClient(ctx context.Context, issuer string, clientID string) (*OIDCCl
 	conf := &oauth2.Config{
 		ClientID: clientID,
 		Endpoint: provider.Endpoint(),
-		Scopes:   []string{oidc.ScopeOpenID, "tfarm", "profile"},
+		Scopes:   []string{oidc.ScopeOpenID},
+	}
+
+	if additionalScopes != nil {
+		conf.Scopes = append(conf.Scopes, additionalScopes...)
 	}
 
 	return &OIDCClient{

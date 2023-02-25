@@ -11,16 +11,12 @@ import (
 	"github.com/cbodonnell/oauth2utils/pkg/utils"
 )
 
-const (
-	KeycloakServerUrl = "http://localhost:8080"
-	RealmName         = "tunnel-farm"
-	ClientId          = "myclient"
-)
+const TokenDir = ".oauth"
 
 func main() {
 	ctx := context.Background()
 
-	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli")
+	oc, err := oauth.NewOIDCClient(ctx, "http://localhost:8080/realms/tunnel.farm", "tfarm-cli", []string{"profile"})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -35,7 +31,7 @@ func main() {
 	}
 
 	// TODO: dont need to save the token if it hasn't changed
-	if err := persistence.SaveToken(token); err != nil {
+	if err := persistence.SaveToken(token, TokenDir); err != nil {
 		log.Fatal(err)
 	}
 

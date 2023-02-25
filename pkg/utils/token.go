@@ -11,15 +11,17 @@ import (
 	"golang.org/x/oauth2"
 )
 
+const TokenDir = ".oauth"
+
 // TryGetToken attempts to load a token from the persistence layer. If the token
 // is expired, it will attempt to refresh it. The function returns nil if the
 // token is invalid or the refresh fails.
 func TryGetToken(ctx context.Context, oc *oauth.OIDCClient) *oauth2.Token {
-	token, err := persistence.LoadToken()
+	token, err := persistence.LoadToken(TokenDir)
 	if err == nil {
 		token, _ = oc.TokenSource(ctx, token).Token()
 		if token != nil {
-			persistence.SaveToken(token)
+			persistence.SaveToken(token, TokenDir)
 		}
 	}
 	return token
