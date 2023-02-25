@@ -21,7 +21,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	token := utils.TryGetToken(ctx, oc)
+	token := utils.TryGetToken(ctx, oc, TokenDir)
 	if !token.Valid() {
 		newToken, err := oc.DeviceCode(ctx)
 		if err != nil {

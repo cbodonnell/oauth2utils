@@ -22,7 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	token := utils.TryGetToken(ctx, oc)
+	token := utils.TryGetToken(ctx, oc, TokenDir)
 	if !token.Valid() {
 		username := term.StringPrompt("Username:")
 		password := term.PasswordPrompt("Password:")
