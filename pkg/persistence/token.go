@@ -20,7 +20,7 @@ func SaveToken(token *oauth2.Token, tokenDir string) error {
 
 	// create the token file
 	tokenFile := path.Join(tokenDir, TokenFile)
-	f, err := os.Create(tokenFile)
+	f, err := os.OpenFile(tokenFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		return err
 	}
