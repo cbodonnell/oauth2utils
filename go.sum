@@ -1,6 +1,6 @@
 cloud.google.com/go/compute/metadata v0.2.0/go.mod h1:zFmK7XCadkQkj6TtorcaGlCW1hT1fIilQDwofLpJ20k=
-github.com/cbodonnell/go-oidc/v3 v3.0.0-20230209024550-31e4e2bd7e6e h1:2kJIifsYG3Wi4rL/7y2AcPuD6isU+FHQw+K6xU1Tas4=
-github.com/cbodonnell/go-oidc/v3 v3.0.0-20230209024550-31e4e2bd7e6e/go.mod h1:ecXRtV4romGPeO6ieExAsUK9cb/3fp9hXNz1tlv8PIM=
+github.com/cbodonnell/go-oidc/v3 v3.0.0-20230402151138-e145b78ff15d h1:UYQkgD8aZnFgYHn+j1dLkOK21yOSzOQ0gmKooyG4K4Q=
+github.com/cbodonnell/go-oidc/v3 v3.0.0-20230402151138-e145b78ff15d/go.mod h1:8SII8eA2XdZBbgNHE1vBOCr4bifKowb0pNgzE2wkduY=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

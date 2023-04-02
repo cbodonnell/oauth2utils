@@ -3,7 +3,7 @@ module github.com/cbodonnell/oauth2utils
 go 1.19
 
 require (
-	github.com/coreos/go-oidc/v3 v3.5.0
+	github.com/cbodonnell/go-oidc/v3 v3.0.0-20230402151138-e145b78ff15d // TODO: replace once device flow is merged
 	golang.org/x/oauth2 v0.4.0
 	golang.org/x/term v0.4.0
 )
@@ -18,5 +18,3 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 )
-
-replace github.com/coreos/go-oidc/v3 => github.com/cbodonnell/go-oidc/v3 v3.0.0-20230209024550-31e4e2bd7e6e
