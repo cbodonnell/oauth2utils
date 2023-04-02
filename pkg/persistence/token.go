@@ -2,8 +2,8 @@ package persistence
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
+	"path"
 
 	"golang.org/x/oauth2"
 )
@@ -13,21 +13,13 @@ const (
 )
 
 func SaveToken(token *oauth2.Token, tokenDir string) error {
-	// get the user home directory
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
-	// create the .tfarm directory
-	dir := fmt.Sprintf("%s/%s", home, tokenDir)
-	err = os.MkdirAll(dir, 0755)
+	err := os.MkdirAll(tokenDir, 0755)
 	if err != nil {
 		return err
 	}
 
 	// create the token file
-	tokenFile := fmt.Sprintf("%s/%s", dir, TokenFile)
+	tokenFile := path.Join(tokenDir, TokenFile)
 	f, err := os.Create(tokenFile)
 	if err != nil {
 		return err
@@ -44,14 +36,8 @@ func SaveToken(token *oauth2.Token, tokenDir string) error {
 }
 
 func LoadToken(tokenDir string) (*oauth2.Token, error) {
-	// get the user home directory
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return nil, err
-	}
-
 	// open the token file
-	tokenFile := fmt.Sprintf("%s/%s/%s", home, tokenDir, TokenFile)
+	tokenFile := path.Join(tokenDir, TokenFile)
 	f, err := os.Open(tokenFile)
 	if err != nil {
 		return nil, err
@@ -69,15 +55,9 @@ func LoadToken(tokenDir string) (*oauth2.Token, error) {
 }
 
 func DeleteToken(tokenDir string) error {
-	// get the user home directory
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
 	// open the token file
-	tokenFile := fmt.Sprintf("%s/%s/%s", home, tokenDir, TokenFile)
-	err = os.Remove(tokenFile)
+	tokenFile := path.Join(tokenDir, TokenFile)
+	err := os.Remove(tokenFile)
 	if err != nil {
 		return err
 	}
