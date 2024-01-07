@@ -50,7 +50,7 @@ func (e ErrTryLater) Error() string {
 }
 
 func (oc *OIDCClient) DeviceCode(ctx context.Context) (*oauth2.Token, error) {
-	deviceCode, err := getDeviceCode(ctx, oc.conf, oc.provider.DeviceEndpoint())
+	deviceCode, err := getDeviceCode(ctx, oc.conf, oc.provider.Endpoint().DeviceAuthURL)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get the device code: %v", err)
 	}
